@@ -19,7 +19,7 @@
     <ul id="product-list"></ul>
 
     <script>
-        let allProducts = []; // Store all products
+        let allProducts = []; 
 
         const fetchProducts = () => {
             fetch('/api/products')
@@ -30,8 +30,8 @@
                     return response.json();
                 })
                 .then(products => {
-                    allProducts = products; // Save all products
-                    displayProducts(allProducts); // Display all products initially
+                    allProducts = products; 
+                    displayProducts(allProducts); 
                 })
                 .catch(error => {
                     console.error('Fetch error:', error);
@@ -40,7 +40,7 @@
 
         const displayProducts = (products) => {
             const productList = document.getElementById('product-list');
-            productList.innerHTML = ''; // Clear the list
+            productList.innerHTML = ''; 
             products.forEach(product => {
                 const li = document.createElement('li');
                 li.className = 'product-item';
@@ -64,7 +64,6 @@
             displayProducts(filteredProducts);
         });
 
-        // Initial fetch to load all products
         fetchProducts();
     </script>
 </body>
