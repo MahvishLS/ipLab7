@@ -69,4 +69,18 @@ li {
     color: white;
 }
 
+#search-container input{
+    background-color: lightblue;
+    border-radius: 8px;
+    padding: 17px;
+    font-size: 15px;
+}
 
+#search-button{
+    text-decoration: none;
+    font-size: 18px;
+    padding: 16px;
+    background-color: #007bff;
+    border-radius: 8px;
+    color: white;
+}

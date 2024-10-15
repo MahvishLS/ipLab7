@@ -8,19 +8,64 @@
 </head>
 <body>
     <h1>Products</h1>
+
+    <div id="search-container">
+        <input type="text" id="search-name" placeholder="Search by name">
+        <input type="number" id="min-price" placeholder="Min Price">
+        <input type="number" id="max-price" placeholder="Max Price">
+        <button id="search-button">Search</button>
+    </div>
+
     <ul id="product-list"></ul>
+
     <script>
-        fetch('/api/products')
-            .then(response => response.json())
-            .then(products => {
-                const productList = document.getElementById('product-list');
-                products.forEach(product => {
-                    const li = document.createElement('li');
-                    li.className = 'product-item';
-                    li.innerHTML = `<a href="product.html?id=${product.id}">${product.name}</a>`;
-                    productList.appendChild(li);
+        let allProducts = []; // Store all products
+
+        const fetchProducts = () => {
+            fetch('/api/products')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(products => {
+                    allProducts = products; // Save all products
+                    displayProducts(allProducts); // Display all products initially
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
                 });
+        };
+
+        const displayProducts = (products) => {
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = ''; // Clear the list
+            products.forEach(product => {
+                const li = document.createElement('li');
+                li.className = 'product-item';
+                li.innerHTML = `<a href="product.html?id=${product.id}">${product.name}</a>`;
+                productList.appendChild(li);
             });
+        };
+
+        document.getElementById('search-button').addEventListener('click', () => {
+            const name = document.getElementById('search-name').value.toLowerCase();
+            const minPrice = parseFloat(document.getElementById('min-price').value);
+            const maxPrice = parseFloat(document.getElementById('max-price').value);
+
+            const filteredProducts = allProducts.filter(product => {
+                const matchesName = product.name.toLowerCase().includes(name);
+                const matchesMinPrice = isNaN(minPrice) || product.price >= minPrice;
+                const matchesMaxPrice = isNaN(maxPrice) || product.price <= maxPrice;
+                return matchesName && matchesMinPrice && matchesMaxPrice;
+            });
+
+            displayProducts(filteredProducts);
+        });
+
+        // Initial fetch to load all products
+        fetchProducts();
     </script>
 </body>
 </html>
